@@ -7,7 +7,11 @@ const serverHost = typeof window !== 'undefined'
   ? (window.location.hostname || 'localhost')
   : 'localhost';
 
-export const BACKEND_URL = `http://${serverHost}:3001`;
+const isLocal = serverHost === 'localhost' || serverHost === '127.0.0.1' || serverHost.startsWith('192.168.') || serverHost.startsWith('10.') || serverHost.startsWith('172.');
+
+export const BACKEND_URL = isLocal 
+  ? `http://${serverHost}:3001`
+  : 'https://nexboard-2vh5.onrender.com';
 
 // Create socket but do NOT auto-connect yet.
 // We connect explicitly when the user enters a room.
