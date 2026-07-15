@@ -114,7 +114,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ roomId, nickname, userColor, pa
   const saveSnapshot = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    undoStack.current.push(JSON.stringify(canvas.toJSON(['id'])));
+    undoStack.current.push(JSON.stringify((canvas as any).toJSON(['id'])));
     redoStack.current = [];
     if (undoStack.current.length > 40) undoStack.current.shift();
   }, []);
@@ -122,7 +122,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ roomId, nickname, userColor, pa
   const pushSnapshot = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    socket.emit('canvas-snapshot', canvas.toJSON(['id']));
+    socket.emit('canvas-snapshot', (canvas as any).toJSON(['id']));
   }, []);
 
 
@@ -240,7 +240,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ roomId, nickname, userColor, pa
     if (!canvas) return;
 
     const onRequestSync = (targetId: string) => {
-      socket.emit('canvas-sync-response', { to: targetId, data: canvas.toJSON(['id']) });
+      socket.emit('canvas-sync-response', { to: targetId, data: (canvas as any).toJSON(['id']) });
     };
     const onSyncData = (data: any) => {
       isRemote.current = true;
@@ -740,7 +740,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ roomId, nickname, userColor, pa
   const handleUndo = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas || !undoStack.current.length) return;
-    redoStack.current.push(JSON.stringify(canvas.toJSON(['id'])));
+    redoStack.current.push(JSON.stringify((canvas as any).toJSON(['id'])));
     const prev = undoStack.current.pop()!;
     isRemote.current = true;
     canvas.loadFromJSON(JSON.parse(prev), () => {
@@ -753,7 +753,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ roomId, nickname, userColor, pa
   const handleRedo = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas || !redoStack.current.length) return;
-    undoStack.current.push(JSON.stringify(canvas.toJSON(['id'])));
+    undoStack.current.push(JSON.stringify((canvas as any).toJSON(['id'])));
     const next = redoStack.current.pop()!;
     isRemote.current = true;
     canvas.loadFromJSON(JSON.parse(next), () => {
@@ -820,7 +820,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ roomId, nickname, userColor, pa
 
         {/* ── Left Toolbar ────────────────────────────── */}
         <div className="toolbar">
-          {TOOL_DEFS.map(({ id, icon, label, key, desc }) => (
+          {TOOL_DEFS.map(({ id, icon, label, key }) => (
             <div key={id} className="tb-wrap">
               <button
                 id={`tool-${id}`}

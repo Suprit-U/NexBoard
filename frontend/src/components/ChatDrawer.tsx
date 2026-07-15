@@ -11,7 +11,7 @@ interface ChatDrawerProps {
 }
 
 const ChatDrawer: React.FC<ChatDrawerProps> = ({
-  open, onClose, nickname, userColor, initialMessages = [],
+  open, onClose, nickname: _nickname, userColor: _userColor, initialMessages = [],
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input,    setInput]    = useState('');
