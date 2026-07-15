@@ -101,4 +101,42 @@ Then visit `http://localhost:5173` in your browser.
 
 ---
 
+## 🌍 How to Deploy (Vercel & Render)
+
+If you want to host this online for your portfolio or resume, follow these exact steps to deploy it for **FREE**.
+
+### Step 1: Deploy the Backend (Render.com)
+Vercel and Netlify do not support persistent WebSockets, so we must host the backend on Render.
+1. Create a free account on [Render.com](https://render.com/).
+2. Click **New +** and select **Web Service**.
+3. Connect your GitHub repository.
+4. **Settings:**
+   - Root Directory: `backend`
+   - Build Command: `npm install && npm run build` *(if you have a build step, otherwise just `npm install`)*
+   - Start Command: `npm run dev` *(or `npm start` if compiled)*
+   - Instance Type: **Free**
+5. Add your Environment Variables (like your Appwrite keys).
+6. Click **Create Web Service**. Once deployed, copy your Render URL (e.g., `https://nexboard-backend.onrender.com`).
+
+### Step 2: Update the Frontend
+Before deploying the frontend, tell it where the backend lives!
+1. Open `frontend/src/utils/socket.ts`.
+2. Change the local IP address to your new Render URL:
+   ```typescript
+   export const socket = io('https://nexboard-backend.onrender.com', { ... });
+   ```
+3. Commit and push this change to GitHub.
+
+### Step 3: Deploy the Frontend (Vercel)
+1. Create a free account on [Vercel.com](https://vercel.com/).
+2. Click **Add New...** > **Project**.
+3. Import your GitHub repository.
+4. **Settings:**
+   - Root Directory: `frontend`
+   - Framework Preset: **Vite**
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+5. Click **Deploy**.
+
+
 **🎉 You're done!** Enjoy collaborating with NexBoard!
